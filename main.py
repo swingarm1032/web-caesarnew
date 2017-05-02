@@ -20,14 +20,24 @@ import caesar
 class MainHandler(webapp2.RequestHandler):
 
     def get(self):
-        message = 'Hello, World!!!!!!!!'
-        rot = 13
-        encryptedMessage = caesar.encrypt(message,rot)
-        heading = "<h1>" + "Enter message to encrypt: "+ "</h1>"
-        textArea = "<textarea>" + encryptedMessage + "</textarea>"
+        rotLabel = "<label>Rotate by:</label>"
+        rotationInput = "<input type='number' name= 'rotation'/>"
+        messaageLabel = "<label>Type a message:</label>"
+        textArea = "<textarea name='message'></textarea>"
         submitButton = "<input type='submit'/>"
-        form = "<form>" + textArea + "<br>" + submitButton + "</form>"
-        self.response.write(heading + "<br>" + form)
+        form = ("<form method='post'>"
+                + rotLabel + rotationInput + "<br>"
+                + messaageLabel + textArea + "<br>"
+                + submitButton + "</form>")
+        header = '<h1>Web Caesar</h1>'
+        self.response.write(header + form)
+
+    def post(self):
+        message = self.request.get("message")
+        rot  = int(self.request.get('rotation'))
+        encryptedMessage = caesar.encrypt(message, rot)
+        self.response.write('The encrypted message is: ' + encryptedMessage)
+
 
 app = webapp2.WSGIApplication([
     ('/', MainHandler)
